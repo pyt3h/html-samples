@@ -1,0 +1,42 @@
+<meta charset="UTF-8">
+
+<div>
+  <button onclick="getWeather()">Lấy thông tin thời tiết</button>
+  <div id="weather_table" style="display: none;">
+    <p><b>Thời tiết 24h tới</b></p>
+    <table border="1">
+      <thead>
+        <tr>
+          <th style="width:25%">Thời gian</th>
+          <th style="width:25%">Nhiệt độ °C</th>
+          <th style="width:25%">Độ ẩm (%)</th>
+          <th style="width:25%">Áp suất khí quyển (atm)</th>
+        </tr>
+      </thead>
+      <tbody id="weather_content"></tbody>
+    </table>
+  </div>
+</div>
+
+<script>
+  function renderRow(row){
+    return (
+      `<tr>
+        <td style="text-align:center">${ row.dt_txt }</td>
+        <td style="text-align:center">${ row.main.temp }</td>
+        <td style="text-align:center">${ row.main.humidity }</td>
+        <td style="text-align:center">${ row.main.pressure/1000 }</td>
+      </tr>`
+    )
+  }
+
+  async function getWeather() {
+    const url = "http://api.openweathermap.org/data/2.5/forecast?id=1581129&units=metric&appid=d6477696b63c2e661af64eead58c11d9&cnt=8";
+    const response = await fetch(url);
+    const result = await response.json();
+    const html = result.list.map(renderRow).join('');
+    document.getElementById('weather_table').style.display = '';
+    document.getElementById('weather_content').innerHTML = html; 
+  }
+  
+</script>
